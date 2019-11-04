@@ -1,12 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-function Form() {
+function Form({ queryData }) {
+	//estado del componente
+	const [search, setSearch] = useState({
+		city: '',
+		country: '',
+	});
+
 	const handleChange = e => {
 		//cambiar el state
+		setSearch({
+			...search,
+			[e.target.name]: e.target.value,
+		});
+	};
+
+	const queryWeather = e => {
+		e.preventDefault();
+
+		//pasar la búsqueda del usuario hacia el componente principal
+		queryData(search);
 	};
 
 	return (
-		<form>
+		<form onSubmit={queryWeather}>
 			<div className="input-field col s12">
 				<input type="text" name="city" id="city" onChange={handleChange} />
 				<label htmlFor="city">City: </label>
@@ -27,7 +44,7 @@ function Form() {
 				<input
 					type="submit"
 					className="waves-effect waves-light btn-large btn-block yellow accent-4"
-					value="Search climate"
+					value="Search"
 				/>
 			</div>
 		</form>
