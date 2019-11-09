@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Form from './components/Form';
 import Error from './components/Error';
@@ -8,6 +8,24 @@ function App() {
 	const [city, setCity] = useState('');
 	const [country, setCountry] = useState('');
 	const [error, setError] = useState(false);
+	const [result, setResult] = useState({});
+
+	useEffect(() => {
+		//prevenir ejecución inicial
+		if (city === '') return;
+
+		const queryApi = async () => {
+			const url = `https://api.openweathermap.org/data/2.5/weather?q=${city},${country}&appid=${process.env.REACT_APP_API_KEY}`;
+
+			//consultar la url
+			const response = await fetch(url);
+			const result = await response.json();
+
+			setResult(result);
+		};
+
+		queryApi();
+	}, [city, country]);
 
 	const queryData = data => {
 		//Validar que ambos campos (city y country), existan
